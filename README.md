@@ -65,3 +65,51 @@ Check `pypylon` installation:
     source piar/bin/activate
     ./gen_img_data.py
     ```
+
+# Install colmap from source
+Install as descrribed here https://colmap.github.io/install.html#linux or follow steps below for building colmap from source on Ubuntu 22.04.
+
+**Note changes when building COLMAP from source on ubuntu 22.04:**
+1. Install requirements:
+    ```
+    sudo apt-get install git cmake build-essential libboost-program-options-dev libboost-filesystem-dev libboost-graph-dev libboost-system-dev libeigen3-dev libflann-dev libfreeimage-dev libmetis-dev libgoogle-glog-dev libgtest-dev libsqlite3-dev libglew-dev qtbase5-dev libqt5opengl5-dev libcgal-dev libceres-dev
+    ```
+    - To compile with CUDA support, also install Ubuntu’s default CUDA package:
+        `sudo apt-get install -y nvidia-cuda-toolkit nvidia-cuda-toolkit-gcc`
+    - Install GCC 10 (must compile against GCC 10 on ubuntu 22.04): `sudo apt-get install gcc-10 g++-10`
+1. clone colmap repo and make build folder:
+    ```
+    git clone https://github.com/colmap/colmap.git
+    cd colmap
+    mkdir build
+    cd build
+    ```
+1. check GPU compute capability is using the command `nvidia-smi --query-gpu=compute_cap --format=csv`
+    - Example output:
+        ```
+        compute_cap
+        6.1
+        ```
+1. then use it in cmake:
+    ```
+    export CC=/usr/bin/gcc-10
+    export CXX=/usr/bin/g++-10
+    export CUDAHOSTCXX=/usr/bin/g++-10
+    cmake .. -DCMAKE_CUDA_ARCHITECTURES=61
+    MAKEFLAGS='-j8 ' cmake --build .
+    ```
+1. Install colmap: `sudo make install`
+
+# Generate LLFF dataset
+1. run in termnal from project root: `python3 colmap2poses.py "data/coil-100/" --colmap_path "/usr/local/bin/colmap"`
+    - **NOTE:** run `which colmap` in terminal to get colmap path.
+
+# TODO:
+- make a dataset that can be used with the nvdiffrec code based on this issue https://github.com/NVlabs/nvdiffrec/issues/58
+- Improve image matching:
+    `"Colmap takes what images it can map together, try exhaustive mapping or reduce image resolution to avoid some motion blur.
+    
+    Under absolutely perfect conditions, colmap shouldn't reject any images, but if you're feeding a large unfiltered dataset it's better to spend the extra time in exhaustive mapping to check each image against each other. Changing res or manually using only images with as little movement of the subject/background should help. I also should note interpolation on video to increase the number of images in a dataset doesn't improve the quality of the model even when the interpolated images are added to the set, tried that for NeRFs awhile ago."`
+
+**NOTES:**
+- guide for generating poses for image dataset for nerf: https://github.com/bmild/nerf#generating-poses-for-your-own-scenes
