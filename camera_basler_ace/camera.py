@@ -7,6 +7,12 @@ class Camera:
         self.tlf = pylon.TlFactory.GetInstance()
         self.camera = pylon.InstantCamera(self.tlf.CreateFirstDevice())
         self.camera.Open()
+
+        # # print(self.camera.Width.Value)
+        # self.camera.BslCenterX()
+        # Center the image
+        self.camera.CenterX.Value = True
+        self.camera.CenterY.Value = True
     
     def grab_imgs(self, nr_imgs=20, imgs_path = './imgs/', imgs_filename_prefix = 'img_', imgs_filename_postfix = '.png'):
         # path to image folder
