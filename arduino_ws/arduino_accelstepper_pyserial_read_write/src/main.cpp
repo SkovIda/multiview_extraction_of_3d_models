@@ -13,10 +13,10 @@ bool send_motor_execution_done_msg = false;
 
 // Define constants for physical setup:
 const int steps_per_revolution = 19200; // For NEMA 17 without microstepping
-const float gear_ratio = 20.0 / 120.0; // NEMA 17 to rotating plate gear ratio
+const float gear_ratio = 1.0; //20.0 / 120.0; // NEMA 17 to rotating plate gear ratio
 
 long total_steps = steps_per_revolution * gear_ratio; // Calculate the total number of steps for a full rotation
-const int steps_per_degree = total_steps / 360.0;
+const float steps_per_degree = total_steps / 360.0;
 long motor_encoder_step_position = 0;
 
 // Init the stepper motor:
@@ -62,7 +62,7 @@ void set_motor_target_pos() {
     dataNumber = int((received_pkg[0] << 8) | received_pkg[1] );  // convert received msg (desired camera angle postion) to int
 
     // Convert desired camera position to motor position (encoder position in steps):
-    motor_encoder_step_position = steps_per_degree * dataNumber;
+    motor_encoder_step_position = steps_per_degree * (float)dataNumber;
 
     // Update flags:
     newData = false;
@@ -71,14 +71,16 @@ void set_motor_target_pos() {
 }
 
 void run_stepper() {
-  // run stepper motor to desired camera position (blocking call):
-  stepper.runToNewPosition(motor_encoder_step_position);
+  // // run stepper motor to desired camera position (blocking call):
+  // stepper.runToNewPosition(motor_encoder_step_position);
+  stepper.moveTo(motor_encoder_step_position);
+  stepper.runToPosition();
 }
 
 void send_motor_pos_to_pc(){
   if (send_motor_execution_done_msg == true){
     // Send msg to pc with currrent angle position of the stepper motor to confirm motor has moved to the correct position.
-    int reached_camera_position = stepper.currentPosition() / steps_per_degree;
+    int reached_camera_position = motor_encoder_step_position; //stepper.currentPosition() / steps_per_degree;
 
     if (Serial.availableForWrite() > pkg_byte_size - 1){
       byte out_buff[pkg_byte_size] = {lowByte(reached_camera_position), highByte(reached_camera_position)};
