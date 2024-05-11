@@ -104,12 +104,17 @@ Install as descrribed here https://colmap.github.io/install.html#linux or follow
 1. run in termnal from project root: `python3 colmap2poses.py "data/coil-100/" --colmap_path "/usr/local/bin/colmap"`
     - **NOTE:** run `which colmap` in terminal to get colmap path.
 
-# TODO:
+# Run nvdiffrec on Linux Server through docker
+**NOTE:** not tested on server, but running nvdiffrec through docker works
+1. get nvdiffrec code from github: `git clone https://github.com/NVlabs/nvdiffrec.git`
+1. use secure copy script to get docker image on the server: `scp ./NVDIFFRECRUNDOCKER/start.sh serverhostname:path/to/dataset/destination`
+1. clone the dataset from github with HTTPS
+
+
+
+# NOTES:
 - make a dataset that can be used with the nvdiffrec code based on this issue https://github.com/NVlabs/nvdiffrec/issues/58
-- Improve image matching:
+- Improve image matching with colmap:
     `"Colmap takes what images it can map together, try exhaustive mapping or reduce image resolution to avoid some motion blur.
     
     Under absolutely perfect conditions, colmap shouldn't reject any images, but if you're feeding a large unfiltered dataset it's better to spend the extra time in exhaustive mapping to check each image against each other. Changing res or manually using only images with as little movement of the subject/background should help. I also should note interpolation on video to increase the number of images in a dataset doesn't improve the quality of the model even when the interpolated images are added to the set, tried that for NeRFs awhile ago."`
-
-**NOTES:**
-- guide for generating poses for image dataset for nerf: https://github.com/bmild/nerf#generating-poses-for-your-own-scenes
