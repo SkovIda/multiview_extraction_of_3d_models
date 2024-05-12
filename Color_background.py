@@ -15,8 +15,8 @@ def crop_center(image, crop_size):
     height, width = image.shape[:2]
     crop_width, crop_height = crop_size
 
-    start_x = width // 2 - crop_width // 2 
-    start_y = (height // 2 - crop_height // 2) + 180
+    start_x = width // 2 - crop_width // 2 +10
+    start_y = (height // 2 - crop_height // 2) + 135
 
     return image[start_y:start_y + crop_height, start_x:start_x + crop_width]
 def create_alpha_mask_with_options_input_loop(image_path, crop_size=(100, 100)):
@@ -38,28 +38,29 @@ def create_alpha_mask_with_options_input_loop(image_path, crop_size=(100, 100)):
     hsv_image = cv2.cvtColor(cropped_image, cv2.COLOR_BGR2HSV)
 
     # Define color ranges for brown and black
-    lower_brown = np.array([10, 100, 20])
+    lower_brown = np.array([10, 100, 10])
     upper_brown = np.array([25, 255, 200])
     lower_black = np.array([0, 0, 0])
-    upper_black = np.array([190, 255, 50])
+    upper_black = np.array([190, 255, 20])
     lower_white = np.array([0, 0, 200])
     upper_white = np.array([180, 30, 255])
 
     # Create masks for brown and black
     mask_brown = cv2.inRange(hsv_image, lower_brown, upper_brown)
 
-    mask_black = cv2.inRange(hsv_image, lower_black, upper_black)
+    # mask_black = cv2.inRange(hsv_image, lower_black, upper_black)
 
     # Clean up the brown mask with morphological operations
-    kernel = np.ones((7,7), np.uint8)
-    mask_black = cv2.morphologyEx(mask_black, cv2.MORPH_CLOSE, kernel)
-    mask_black = cv2.morphologyEx(mask_black, cv2.MORPH_OPEN, kernel)
+    # kernel = np.ones((7,7), np.uint8)
+    # mask_black = cv2.morphologyEx(mask_black, cv2.MORPH_CLOSE, kernel)
+    # mask_black = cv2.morphologyEx(mask_black, cv2.MORPH_OPEN, kernel)
 
     # Combine the masks to create a single mask for both brown and black
-    combined_mask = cv2.bitwise_or(mask_brown, mask_black)
+    # combined_mask = cv2.bitwise_or(mask_brown, mask_black)
 
     # Invert the mask to keep everything that is not brown or black
-    inverted_mask = cv2.bitwise_not(combined_mask)
+    inverted_mask = cv2.bitwise_not(mask_brown)
+    # inverted_mask = cv2.bitwise_not(combined_mask)
     kernel = np.ones((3,3), np.uint8)
     inverted_mask= cv2.morphologyEx(inverted_mask, cv2.MORPH_CLOSE, kernel)
     inverted_mask= cv2.morphologyEx(inverted_mask, cv2.MORPH_OPEN, kernel)
@@ -93,5 +94,5 @@ def create_alpha_mask_with_options_input_loop(image_path, crop_size=(100, 100)):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 # Example usage
-image_path = '/home/milosz/Desktop/project AR/multiview_extraction_of_3d_models/data/test_gen_dataset_2/images/img_061.png'
-create_alpha_mask_with_options_input_loop(image_path, crop_size=(500, 500))
+image_path = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\images\\img_139.png"
+create_alpha_mask_with_options_input_loop(image_path, crop_size=(300, 290))
