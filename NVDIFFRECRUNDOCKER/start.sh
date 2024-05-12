@@ -6,22 +6,37 @@ FULL_IMAGE="$DOCKER_USER/$DOCKER_IMAGE:$DOCKER_TAG"
 NVDIFFREC_PATH="$1"
 DATASET_PATH="$2"
 
+usage() {
+	echo -e "
+Usage: $0 nvdiffrec_path dataset_path
+
+\tnvdiffrec_path\tpath to the nvdiffrec repo
+\tdataset_path\tpath to the directory containing configs and datasets
+"
+}
+
+die() {
+	usage
+	exit 1
+
+}
+
 if [ -z "$NVDIFFREC_PATH" ]; then
 	echo 'no nvdiffrec path provided as arg 1, exiting...'
-	exit 1
+	die
 fi
 if [ -z "$DATASET_PATH" ]; then
 	echo 'no dataset path provided as arg 2, exiting...'
-	exit 1
+	die
 fi
 
 if [ ! -d "$NVDIFFREC_PATH" ]; then
 	echo "$NVDIFFREC_PATH is not a dir!"
-	exit 1
+	die
 fi
 if [ ! -d "$DATASET_PATH" ]; then
 	echo "$DATASET_PATH is not a dir!"
-	exit 1
+	die
 fi
 
 echo "Running container with dataset in /dataset."
