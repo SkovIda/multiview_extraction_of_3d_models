@@ -104,13 +104,25 @@ Install as descrribed here https://colmap.github.io/install.html#linux or follow
 1. run in termnal from project root: `python3 colmap2poses.py "data/coil-100/" --colmap_path "/usr/local/bin/colmap"`
     - **NOTE:** run `which colmap` in terminal to get colmap path.
 
+1. **NOTE:** run `gen_nerd_dataset.py` with the absolute path to the root dir of the dataset to remove the images and corresponding masks from the `images/` and `masks/` dirs in the dataset dir.
+
+
 # Run nvdiffrec on Linux Server through docker
 **NOTE:** not tested on server, but running nvdiffrec through docker works
 1. get nvdiffrec code from github: `git clone https://github.com/NVlabs/nvdiffrec.git`
 1. use secure copy script to get docker image on the server: `scp ./NVDIFFRECRUNDOCKER/start.sh serverhostname:path/to/dataset/destination`
 1. clone the dataset from github with HTTPS
 
+Run training example:
+1. init docker container with path to nvdiffrec and path to dataset (same dir if using the nvdiffrec datasets): `./start.sh /home/ida/Downloads/git_sources/nvdiffrec  /home/ida/Downloads/git_sources/nvdiffrec`
+1. train with bob: `python train.py --config configs/bob.json`
 
+Run training with custom data:
+1. use secure copy `scp ./NVDIFFRECRUNDOCKER/start.sh serverhostname:path/to/dataset/destination` to copy required files from local to server:
+    1. copy the dataset folder (imgs dir, masks dir, and poses_bounds.npy) into `data/nerd/`
+    1. copy the scale_images2.py into `data/nerd/` and run it from nvdiffrec root dir (`nvdiffrec/data/nerd/`). NOTE: make sure the name of the  dataset (i.e., the dir name) matches the name in scale_images2.py
+    1. copy the nerd_benchy.json into the `nvdiffrec/configs/` dir
+1. **NOTE:** run train.py from root dir with `TMux` or `screen` (if installed on server)
 
 # NOTES:
 - make a dataset that can be used with the nvdiffrec code based on this issue https://github.com/NVlabs/nvdiffrec/issues/58
