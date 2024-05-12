@@ -85,12 +85,21 @@ def create_alpha_mask_with_combined_method(base_path, start_num, end_num,  crop_
         # Create the final alpha mask
         alpha_mask = grabcut_mask*255
         
+        # final_output = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
+        # final_output[:, :, 3] = alpha_mask
+        background_color = [0,0,0]
+
+        # Create the final image with the background color applied
+        final_output = image.copy()
+        final_output[grabcut_mask == 0] = background_color
         # kernel = np.ones((9, 9), np.uint8)
         # alpha_mask = cv2.morphologyEx(alpha_mask, cv2.MORPH_CLOSE, kernel)
         # alpha_mask = cv2.morphologyEx(alpha_mask, cv2.MORPH_OPEN, kernel)
 
-        alpha_mask_path = f"{base_path_out}{i:03d}_alpha_mask.JPG"
+        alpha_mask_path = f"{base_path_out}{i:03d}.JPG"
         cv2.imwrite(alpha_mask_path, alpha_mask, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+        final_path = f"{base_path_out_2}{i:03d}.JPG"
+        cv2.imwrite( final_path,final_output, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
         
         print(f"Processed and saved {alpha_mask_path}")
         
@@ -99,6 +108,7 @@ def create_alpha_mask_with_combined_method(base_path, start_num, end_num,  crop_
 # Example usage
 base_path = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\images\\img_"  # Base path without number or file extension
 base_path_out = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\alpha\\img_"
+base_path_out_2 = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\final\\img_"
 start_num = 0  # Starting number of your images
 end_num = 139  # Ending number of your images
 
