@@ -64,4 +64,4 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
 
 
 if __name__=='__main__':
-    capture_images(image_dataset_name='test_gen_dataset_2', n_images_per_full_rotation=20)
+    capture_images(image_dataset_name='benchy_3', n_images_per_full_rotation=20)
