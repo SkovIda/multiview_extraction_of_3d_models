@@ -93,8 +93,8 @@ def create_alpha_mask_for_sequence(base_path, start_num, end_num, crop_size=(500
         print(f"Processed and saved {alpha_mask_path}")
         
 # Example usage
-base_path = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\images\\img_"  # Base path without number or file extension
-base_path_out = "C:\\Users\\HP\\Desktop\\SDU\\SEM2\\Project in Advanced Robotics\\data\\benchy_2\\alpha\\img_"
+base_path = "/home/milosz/Desktop/project_AR/multiview_extraction_of_3d_models/data/benchy_2/images/img_"  # Base path without number or file extension
+base_path_out = "/home/milosz/Desktop/project_AR/multiview_extraction_of_3d_models/data/benchy_2/alpha/img_"
 start_num = 0  # Starting number of your images
 end_num = 139  # Ending number of your images
 
