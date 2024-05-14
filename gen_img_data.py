@@ -5,10 +5,18 @@ import cv2
 from camera_basler_ace import camera
 from arduino_serial.arduino_serial_read_write import SerialArduinoReadWrite
 
+from pathlib import Path
+
 def capture_images(image_dataset_name, n_images_per_full_rotation=20):
     serial_arduino = SerialArduinoReadWrite()
     print('wait for ARDUINO UNO to finish resetting after opening the serial port...')
     time.sleep(2)   # NOTE: SERIAL COMMUNICATION WITH ARDUINO UNO WILL FAIL IF THIS IS REMOVED!!!
+
+    # Create data/<image_dataset_name>/images dir if it does not exist. Exit if it does, to not overwrite existing datasets 
+    #imgs_path = './data/' + image_dataset_name + '/images/'
+    Path('./data/' + image_dataset_name).mkdir(exist_ok=True)
+    imgs_path = './data/' + image_dataset_name + '/images/'
+    Path(imgs_path).mkdir(exist_ok=True)
 
     cam = camera.Camera()
     # grab_n_imgs = n_images_per_full_rotation
@@ -21,7 +29,7 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
     n_full_rotations = grab_n_imgs // n_images_per_full_rotation
 
     # cam.init_camera_grab(n_imgs=grab_n_imgs, imgs_path='./data/' + image_dataset_name + '/images/')
-    cam.init_camera_grab(n_imgs=n_full_rotations*n_images_per_full_rotation, imgs_path='./data/' + image_dataset_name + '/images/')
+    cam.init_camera_grab(n_imgs=n_full_rotations*n_images_per_full_rotation, imgs_path=imgs_path, imgs_filename_postfix='.JPG')
 
     subsections = n_images_per_full_rotation
     angle_rot_step = int(360 / subsections)
@@ -32,9 +40,8 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
     # done_captuing_imgs = False
     answer = None
 
-    
-
     for cam_angle in range(n_full_rotations):
+        answer = input("Move camera to desired position and press enter to continue: ")
         for i in range(subsections):
             int_to_send = i * angle_rot_step
             serial_arduino.send_message(int_to_send)
@@ -46,8 +53,10 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
                     print('received msg:',end=' ')
                     print('{!r}'.format(read))
                     motor_is_executing_command = False
+                    time.sleep(1)
                 time.sleep(0.01)
             
+
             grabbed_img = cam.grab_next_img()
             
             if grabbed_img is not None:
@@ -59,9 +68,20 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
                 #     print(f'Escape key pressed...\nExiting program after saving image to {grabbed_img[0]}')
                 #     break
                 time.sleep(0.1)
-        answer = input("Move camera to new position and press enter to continue: ")
+        # answer = input("Move camera to new position and press enter to continue: ")
+    int_to_send = 0
+    serial_arduino.send_message(int_to_send)
+
+    motor_is_executing_command = True
+    while motor_is_executing_command:
+        read = serial_arduino.get_message()
+        if read is not None:
+            print('received msg:',end=' ')
+            print('{!r}'.format(read))
+            motor_is_executing_command = False
+        time.sleep(0.01)
     time.sleep(2)
 
 
 if __name__=='__main__':
-    capture_images(image_dataset_name='benchy_3', n_images_per_full_rotation=20)
+    capture_images(image_dataset_name='thermostat_p2_high_light', n_images_per_full_rotation=20)
