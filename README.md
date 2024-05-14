@@ -111,7 +111,8 @@ Install as descrribed here https://colmap.github.io/install.html#linux or follow
 **NOTE:** not tested on server, but running nvdiffrec through docker works
 1. get nvdiffrec code from github: `git clone https://github.com/NVlabs/nvdiffrec.git`
 1. use secure copy script to get docker image on the server: `scp ./NVDIFFRECRUNDOCKER/start.sh serverhostname:path/to/dataset/destination`
-1. clone the dataset from github with HTTPS
+1. create Personal Access Token on github. COPY THE GENERATED TOKEN SAVE IT - CAN'T BE FOUND AFTER CLOSING THE WINDOW!
+1. clone the dataset from github with HTTPS: `git clone https://<pat_token>@github.com/<your account or organization>/<repo>.git`
 
 Run training example:
 1. init docker container with path to nvdiffrec and path to dataset (same dir if using the nvdiffrec datasets): `./start.sh /home/ida/Downloads/git_sources/nvdiffrec  /home/ida/Downloads/git_sources/nvdiffrec`
