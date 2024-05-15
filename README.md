@@ -125,6 +125,9 @@ Run training with custom data:
     1. copy the nerd_benchy.json into the `nvdiffrec/configs/` dir
 1. **NOTE:** run train.py from root dir with `TMux` or `screen` (if installed on server)
 
+# Generate higher resolution tetrahedral grid
+1. Follow the steps described here: https://github.com/NVlabs/nvdiffrec/issues/23 to generate a higher resolution tetrahedral grid using the centered cube in wavefrom OBJ that NVlabs used to generate tet grids of varying resolutions in `quartet`.
+
 # NOTES:
 - make a dataset that can be used with the nvdiffrec code based on this issue https://github.com/NVlabs/nvdiffrec/issues/58
 - Improve image matching with colmap:
