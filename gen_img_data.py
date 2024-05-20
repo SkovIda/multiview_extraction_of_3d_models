@@ -53,7 +53,7 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
                     print('received msg:',end=' ')
                     print('{!r}'.format(read))
                     motor_is_executing_command = False
-                    time.sleep(1)
+                    time.sleep(3)
                 time.sleep(0.01)
             
 
@@ -84,4 +84,4 @@ def capture_images(image_dataset_name, n_images_per_full_rotation=20):
 
 
 if __name__=='__main__':
-    capture_images(image_dataset_name='thermostat_p2_high_light', n_images_per_full_rotation=20)
+    capture_images(image_dataset_name='thermostat_p2_low_light_perfect', n_images_per_full_rotation=20)
