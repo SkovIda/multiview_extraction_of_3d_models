@@ -33,8 +33,8 @@ AccelStepper stepper = AccelStepper(motorInterfaceType, stepPin, dirPin);
 void setup() {
   Serial.begin(9600);
 
-  stepper.setMaxSpeed(5000);
-  stepper.setAcceleration(3000);
+  stepper.setMaxSpeed(2500);
+  stepper.setAcceleration(1500);
 }
 
 void read_incoming_pkg() {
