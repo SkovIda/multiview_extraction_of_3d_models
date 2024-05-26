@@ -130,9 +130,3 @@ Run training with custom data:
 # Generate higher resolution tetrahedral grid
 1. Follow the steps described here: https://github.com/NVlabs/nvdiffrec/issues/23 to generate a higher resolution tetrahedral grid using the centered cube in wavefrom OBJ that NVlabs used to generate tet grids of varying resolutions in `quartet`.
 
-# NOTES:
-- make a dataset that can be used with the nvdiffrec code based on this issue https://github.com/NVlabs/nvdiffrec/issues/58
-- Improve image matching with colmap:
-    `"Colmap takes what images it can map together, try exhaustive mapping or reduce image resolution to avoid some motion blur.
-    
-    Under absolutely perfect conditions, colmap shouldn't reject any images, but if you're feeding a large unfiltered dataset it's better to spend the extra time in exhaustive mapping to check each image against each other. Changing res or manually using only images with as little movement of the subject/background should help. I also should note interpolation on video to increase the number of images in a dataset doesn't improve the quality of the model even when the interpolated images are added to the set, tried that for NeRFs awhile ago."`
